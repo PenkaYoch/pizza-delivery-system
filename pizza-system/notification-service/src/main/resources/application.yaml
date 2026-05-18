@@ -6,7 +6,7 @@ spring:
     name: notification-service
 
   spring:
-    kafka:
+    Kafka:
       bootstrap-servers: localhost:9092
       consumer:
         group-id: pizza-notification-group
@@ -18,3 +18,7 @@ spring:
           spring.json.trusted.packages: "*"
           # 2. Spring to use the method parameter type instead of the __TypeId__ header
           spring.json.value.default.type: "com.pizza.delivery.notification.dto.PizzaOrderEvent"
+
+    data:
+      mongodb:
+        uri: mongodb://localhost:27017/notification_db
