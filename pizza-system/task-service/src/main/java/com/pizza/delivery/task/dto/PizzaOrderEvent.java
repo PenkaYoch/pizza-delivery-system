@@ -1,4 +1,7 @@
 package com.pizza.delivery.task.dto;
 
-public class PizzaOrderEvent {
-}
+public record PizzaOrderEvent(
+        Long orderId,
+        String pizzaName,
+        String status
+) {}
