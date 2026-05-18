@@ -1,0 +1,20 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: notification-service
+
+  spring:
+    kafka:
+      bootstrap-servers: localhost:9092
+      consumer:
+        group-id: pizza-notification-group
+        auto-offset-reset: earliest
+        key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+        value-deserializer: org.springframework.kafka.support.serializer.JacksonJsonDeserializer
+        properties:
+          # 1. Trust all packages
+          spring.json.trusted.packages: "*"
+          # 2. Tell Spring to use the method parameter type instead of the __TypeId__ header
+          spring.json.value.default.type: "com.pizza.delivery.notification.dto.PizzaOrderEvent"
