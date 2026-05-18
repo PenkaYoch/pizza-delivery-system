@@ -1,0 +1,4 @@
+spring:
+  kafka:
+    # Routes traffic inside the container network to the KRaft internal port
+    bootstrap-servers: kafka:29094

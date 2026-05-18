@@ -1,6 +1,6 @@
 version: '3.8'
 services:
-  # Database for the Task Service (The Kitchen)
+  # 1. Database Layer
   postgres-db:
     image: postgres:16-alpine
     container_name: pizza-postgres
@@ -12,29 +12,62 @@ services:
       - POSTGRES_PASSWORD=password
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d pizza_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
+  # 2. Messaging Layer (KRaft Mode)
   kafka:
     image: confluentinc/cp-kafka:latest
     container_name: pizza-kafka
     ports:
       - "9092:9092"
     environment:
-      # 1. KRaft Specific Settings
       KAFKA_NODE_ID: 1
       KAFKA_PROCESS_ROLES: 'broker,controller'
       KAFKA_CONTROLLER_QUORUM_VOTERS: '1@localhost:29093'
       KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
-      CLUSTER_ID: 'MkU3OEVBNTcwNTJENDM2Qk' # Required: A unique 22-character base64 UUID
-
-      # 2. Dual-Listener Architecture (Host Machine vs Docker Container internal network)
+      CLUSTER_ID: 'MkU3OEVBNTcwNTJENDM2Qk'
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT'
       KAFKA_LISTENERS: 'PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:29093,PLAINTEXT_INTERNAL://0.0.0.0:29094'
       KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://localhost:9092,PLAINTEXT_INTERNAL://kafka:29094'
-
-      # 3. Single-Node Tuning optimizations (prevents cluster election timeouts)
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+
+  # 3. Java Kitchen Module (Producer)
+  task-service:
+    image: pizza-task-service:latest
+    build:
+      context: .
+      dockerfile: task-service/Dockerfile
+    container_name: pizza-task-service
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker # Activates application-docker.yml settings
+    depends_on:
+      postgres-db:
+        condition: service_healthy # Wait for database to accept connections
+      kafka:
+        condition: service_started
+
+  # 4. Kotlin Notification Module (Consumer)
+  notification-service:
+    image: pizza-notification-service:latest
+    build:
+      context: .
+      dockerfile: notification-service/Dockerfile
+    container_name: pizza-notification-service
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      kafka:
+        condition: service_started
 
 volumes:
   postgres_data:

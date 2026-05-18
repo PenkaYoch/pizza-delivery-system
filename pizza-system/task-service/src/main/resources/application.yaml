@@ -7,7 +7,7 @@ spring:
     password: password
   jpa:
     hibernate:
-      ddl-auto: update # Automatically creates tables for you
+      ddl-auto: update # Automatically creates tables
     show-sql: true
 
     kafka:
