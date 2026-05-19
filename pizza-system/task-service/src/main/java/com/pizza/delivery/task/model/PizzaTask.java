@@ -1,8 +1,6 @@
 package com.pizza.delivery.task.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,6 +13,7 @@ public class PizzaTask {
     @GeneratedValue
     private Long id;
     private String pizzaName;
-    private String status; // preparing, ready
+    @Enumerated(EnumType.STRING)
+    private PizzaTaskStatus status;
     private LocalDateTime createdAt = LocalDateTime.now();
 }
