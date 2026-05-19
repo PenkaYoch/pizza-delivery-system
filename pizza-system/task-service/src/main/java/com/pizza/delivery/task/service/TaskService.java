@@ -6,11 +6,17 @@ import com.pizza.delivery.task.model.PizzaTask;
 import com.pizza.delivery.task.model.PizzaTaskStatus;
 import com.pizza.delivery.task.repository.TaskRepository;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 public class TaskService {
+    private static final Logger log = LoggerFactory.getLogger(TaskService.class);
     private final TaskRepository repository;
     private final KafkaTemplate<String, PizzaOrderStatusChangedEvent> kafkaTemplate;
     private final PizzaOvenService ovenService;
@@ -32,7 +38,7 @@ public class TaskService {
 
         // 2. Broadcast Preparing state to Kafka immediately
         PizzaOrderStatusChangedEvent preparingEvent = new PizzaOrderStatusChangedEvent(savedTask.getId(), savedTask.getPizzaName(), savedTask.getStatus().name());
-        kafkaTemplate.send("pizza-orders", String.valueOf(savedTask.getId()), preparingEvent);
+        publishStatusChanged(savedTask.getId(), preparingEvent);
 
         // 3. Kick off the async background baking loop
         ovenService.bakePizza(savedTask.getId());
@@ -40,5 +46,25 @@ public class TaskService {
         // 4. Return the entity instantly so the controller doesn't block
         return savedTask;
 
+    }
+
+    public List<PizzaTask> getTasks() {
+        return repository.findAll();
+    }
+
+    public Optional<PizzaTask> getTask(Long id) {
+        return repository.findById(id);
+    }
+
+    private void publishStatusChanged(Long taskId, PizzaOrderStatusChangedEvent event) {
+        try {
+            kafkaTemplate.send("pizza-orders", String.valueOf(taskId), event)
+                    .exceptionally(ex -> {
+                        log.warn("Failed to publish pizza task status event for task {}", taskId, ex);
+                        return null;
+                    });
+        } catch (RuntimeException ex) {
+            log.warn("Failed to publish pizza task status event for task {}", taskId, ex);
+        }
     }
 }

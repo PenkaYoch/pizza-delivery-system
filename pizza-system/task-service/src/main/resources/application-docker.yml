@@ -3,6 +3,6 @@ spring:
     # Uses the service name defined in docker-compose
     url: jdbc:postgresql://postgres-db:5432/pizza_db
 
-  Kafka:
+  kafka:
     # Uses the internal broker address & port configured in KRaft
-    bootstrap-servers: Kafka:29094
+    bootstrap-servers: kafka:29094

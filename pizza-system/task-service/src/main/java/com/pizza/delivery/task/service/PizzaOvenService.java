@@ -4,13 +4,15 @@ import com.pizza.delivery.task.dto.PizzaOrderStatusChangedEvent;
 import com.pizza.delivery.task.model.PizzaTask;
 import com.pizza.delivery.task.model.PizzaTaskStatus;
 import com.pizza.delivery.task.repository.TaskRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
 public class PizzaOvenService {
-
+    private static final Logger log = LoggerFactory.getLogger(PizzaOvenService.class);
     private final TaskRepository repository;
     private final KafkaTemplate<String, PizzaOrderStatusChangedEvent> kafkaTemplate;
 
@@ -35,11 +37,23 @@ public class PizzaOvenService {
 
             // 4. Broadcast the new ready status to Kafka
             PizzaOrderStatusChangedEvent readyEvent = new PizzaOrderStatusChangedEvent(task.getId(), task.getPizzaName(), task.getStatus().name());
-            kafkaTemplate.send("pizza-orders", String.valueOf(task.getId()), readyEvent);
+            publishStatusChanged(task.getId(), readyEvent);
 
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new RuntimeException("Baking process was interrupted", e);
+        }
+    }
+
+    private void publishStatusChanged(Long taskId, PizzaOrderStatusChangedEvent event) {
+        try {
+            kafkaTemplate.send("pizza-orders", String.valueOf(taskId), event)
+                    .exceptionally(ex -> {
+                        log.warn("Failed to publish pizza task status event for task {}", taskId, ex);
+                        return null;
+                    });
+        } catch (RuntimeException ex) {
+            log.warn("Failed to publish pizza task status event for task {}", taskId, ex);
         }
     }
 }
