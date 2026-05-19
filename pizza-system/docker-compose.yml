@@ -65,11 +65,13 @@ services:
       - "8081:8081"
     environment:
       - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_MONGODB_URI=mongodb://mongodb:27017/notification_db
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:29094
     depends_on:
       kafka:
         condition: service_started
       mongodb:
-        condition: service_started
+        condition: service_healthy
 
   # 5. NoSQL Database for Notification History
   mongodb:
@@ -79,6 +81,11 @@ services:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
+    healthcheck:
+      test: [ "CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
 volumes:
   postgres_data:

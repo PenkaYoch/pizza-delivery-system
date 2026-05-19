@@ -1,8 +1,7 @@
 spring:
-  Kafka:
+  kafka:
     # Routes traffic inside the container network to the KRaft internal port
-    bootstrap-servers: Kafka:29094
+    bootstrap-servers: kafka:29094
 
-  data:
-    mongodb:
+  mongodb:
       uri: mongodb://mongodb:27017/notification_db

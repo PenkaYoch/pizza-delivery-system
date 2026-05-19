@@ -15,6 +15,10 @@ WORKDIR /app
 
 COPY --from=build /app/notification-service/target/*.jar app.jar
 
+ENV SPRING_PROFILES_ACTIVE=docker
+ENV SPRING_MONGODB_URI=mongodb://mongodb:27017/notification_db
+ENV SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:29094
+
 EXPOSE 8081
 
 ENTRYPOINT ["java", "-jar", "app.jar"]

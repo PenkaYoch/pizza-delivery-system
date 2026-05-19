@@ -2,7 +2,7 @@ spring:
   application:
     name: task-service
   datasource:
-    url: JDBC:postgresql://localhost:5432/pizza_db
+    url: jdbc:postgresql://localhost:5432/pizza_db
     username: admin
     password: password
   jpa:
@@ -10,7 +10,7 @@ spring:
       ddl-auto: update # Automatically creates tables
     show-sql: true
 
-    Kafka:
+    kafka:
       bootstrap-servers: localhost:9092
       producer:
         key-serializer: org.apache.kafka.common.serialization.StringSerializer

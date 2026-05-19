@@ -1,12 +1,8 @@
 package com.pizza.delivery.task.controller;
 
-import com.pizza.delivery.task.dto.PizzaOrderEvent;
 import com.pizza.delivery.task.model.PizzaTask;
-import com.pizza.delivery.task.repository.TaskRepository;
 import com.pizza.delivery.task.service.TaskService;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
