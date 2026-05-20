@@ -75,3 +75,4 @@ function notificationTemplate(notification) {
       <time>${formatDate(notification.timestamp)}</time>
     </li>
   `;
+ }
