@@ -14,7 +14,7 @@ export function statusLabel(status) {
 }
 
 export function escapeHtml(value) {
-  return String(value ?? "")
+  return String(value == null ? "" : value)
     .replaceAll("&", "&amp;")
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;")

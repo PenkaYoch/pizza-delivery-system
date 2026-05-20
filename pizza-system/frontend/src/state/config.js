@@ -6,7 +6,8 @@ const defaults = {
 const legacyUrls = new Set(["http://localhost:8080/", "http://localhost:8081"]);
 
 export function getApiUrl(key) {
-  return localStorage.getItem(key) || defaults[key];
+  const storedValue = localStorage.getItem(key);
+  return storedValue ? storedValue.trim() || defaults[key] : defaults[key];
 }
 
 export function saveApiUrl(key, value) {
