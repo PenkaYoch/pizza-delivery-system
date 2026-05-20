@@ -86,8 +86,8 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     container_name: pizza-frontend
-    ports:
-      - "${FRONTEND_PORT:-80}:80"
+    expose:
+      - "80"
     depends_on:
       - task-service
       - notification-service
