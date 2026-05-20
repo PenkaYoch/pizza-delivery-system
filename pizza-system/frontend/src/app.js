@@ -79,4 +79,9 @@ function startApp() {
   setInterval(refreshData, 10000);
 }
 
-startApp();
+try {
+  startApp();
+} catch (error) {
+  setMessage(Frontend startup failed: ${error.message}, "error");
+  throw error;
+}
