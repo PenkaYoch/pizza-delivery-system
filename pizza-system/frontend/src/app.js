@@ -82,6 +82,6 @@ function startApp() {
 try {
   startApp();
 } catch (error) {
-  setMessage(Frontend startup failed: ${error.message}, "error");
+  setMessage(`Frontend startup failed: ${error.message}`, "error");
   throw error;
 }
