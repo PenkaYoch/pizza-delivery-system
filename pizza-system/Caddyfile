@@ -1,0 +1,11 @@
+{
+    email {$ACME_EMAIL}
+}
+
+{$PUBLIC_DOMAIN} {
+    reverse_proxy frontend:80
+}
+
+www.{$PUBLIC_DOMAIN} {
+    redir https://{$public_domain}{uri}/ permanent
+}

@@ -93,6 +93,25 @@ services:
       - notification-service
     restart: unless-stopped
 
+  caddy:
+      image: caddy:2.8-alpine
+      container_name: pizza-caddy
+      ports:
+          - "80:80"
+          - "443:443"
+      environment:
+          - PUBLIC_DOMAIN=${PUBLIC_DOMAIN}
+          - ACME_EMAIL=${ACME_EMAIL}
+      volumes:
+          - ./Caddyfile:/etc/caddy/Caddyfile:ro
+          - caddy_data:/data
+          - caddy_config:/config
+      depends_on:
+          - frontend
+      restart: unless-stopped
+
 volumes:
   postgres_data:
   mongo_data:
+  caddy_data:
+  caddy_config:
