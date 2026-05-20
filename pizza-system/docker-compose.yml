@@ -89,6 +89,19 @@ services:
       timeout: 5s
       retries: 10
 
+  # 6. Browse UI
+  frontend:
+    image: pizza-frontend:latest
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: pizza-frontend
+    ports:
+    - "5173:80"
+    depends_on:
+    - task-service
+    - notification-service
+
 volumes:
   postgres_data:
   mongo_data:
