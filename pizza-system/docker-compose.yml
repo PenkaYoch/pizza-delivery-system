@@ -48,6 +48,7 @@ services:
       - "8080:8080"
     environment:
       - SPRING_PROFILES_ACTIVE=docker # Activates application-docker.yml settings
+      - CORS_ALLOWED_ORIGINS=http://localhost:3000,http://localhost:5173
     depends_on:
       postgres-db:
         condition: service_healthy # Wait for database to accept connections
@@ -67,6 +68,7 @@ services:
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_MONGODB_URI=mongodb://mongodb:27017/notification_db
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:29094
+      - CORS_ALLOWED_ORIGINS=http://localhost:3000,http://localhost:5173
     depends_on:
       kafka:
         condition: service_started
