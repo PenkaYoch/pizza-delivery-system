@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pizza Delivery Console</title>
+    <link rel="stylesheet" href="./src/styles.css" />
+</head>
+<body>
+<main class="app-shell">
+    <header class="topbar">
+        <div class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 48 48" role="img">
+                <path d="M8 41 40 9c-8-2-17 0-23 6s-9 15-9 26Z" fill="#f4c95d" />
+                <path d="M8 41c11 0 20-3 26-9s8-14 6-23L8 41Z" fill="#ec6f4e" />
+                <circle cx="25" cy="22" r="3" fill="#8f2d2f" />
+                <circle cx="19" cy="30" r="3" fill="#8f2d2f" />
+                <circle cx="31" cy="28" r="2.5" fill="#8f2d2f" />
+            </svg>
+        </div>
+        <div>
+            <p class="eyebrow">Pizza delivery</p>
+            <h1>Kitchen Console</h1>
+        </div>
+        <button class="ghost-button" id="refreshButton" type="button">Refresh</button>
+    </header>
+
+    <section class="toolbar" aria-label="Service settings">
+        <label>
+            Task API
+            <input id="taskApiUrl" type="url" autocomplete="off" />
+        </label>
+        <label>
+            Notification API
+            <input id="notificationApiUrl" type="url" autocomplete="off" />
+        </label>
+    </section>
+
+    <section class="order-panel" aria-labelledby="createOrderTitle">
+        <div>
+            <p class="eyebrow">New task</p>
+            <h2 id="createOrderTitle">Create pizza order</h2>
+        </div>
+        <form id="orderForm" class="order-form">
+            <input id="pizzaName" name="pizzaName" placeholder="Pizza name" autocomplete="off" required />
+            <button type="submit">Create</button>
+        </form>
+    </section>
+
+    <section class="status-grid" aria-label="Task summary">
+        <div class="metric">
+            <span id="totalTasks">0</span>
+            <p>Total tasks</p>
+        </div>
+        <div class="metric">
+            <span id="preparingTasks">0</span>
+            <p>Preparing</p>
+        </div>
+        <div class="metric">
+            <span id="readyTasks">0</span>
+            <p>Ready</p>
+        </div>
+        <div class="metric">
+            <span id="notificationCount">0</span>
+            <p>Notifications</p>
+        </div>
+    </section>
+
+    <p id="message" class="message" role="status" aria-live="polite"></p>
+
+    <section class="workspace">
+        <div class="table-section">
+            <div class="section-heading">
+                <h2>Tasks</h2>
+                <span id="lastUpdated">Not loaded</span>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Pizza</th>
+                        <th>Status</th>
+                        <th>Created</th>
+                    </tr>
+                    </thead>
+                    <tbody id="tasksTable"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <aside class="notifications-section" aria-labelledby="notificationsTitle">
+            <div class="section-heading">
+                <h2 id="notificationsTitle">Notifications</h2>
+            </div>
+            <ol id="notificationsList" class="notification-list"></ol>
+        </aside>
+    </section>
+</main>
+
+<script src="./src/app.js" type="module"></script>
+</body>
+</html>
