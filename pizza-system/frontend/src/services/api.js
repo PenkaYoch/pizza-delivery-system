@@ -30,14 +30,14 @@ export function createTask(taskApiUrl, pizzaName) {
 }
 
 export function updateTask(taskApiUrl, taskId, updates) {
-  return requestJson(${taskApiUrl}/api/tasks/${taskId}, {
+  return requestJson(`${taskApiUrl}/api/tasks/${taskId}`, {
     method: "PATCH",
     body: JSON.stringify(updates)
   });
 }
 
 export function deleteTask(taskApiUrl, taskId) {
-  return requestJson(${taskApiUrl}/api/tasks/${taskId}, {
+  return requestJson(`${taskApiUrl}/api/tasks/${taskId}`, {
     method: "DELETE"
   });
 }
