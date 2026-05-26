@@ -82,7 +82,7 @@ async function handleTaskAction(event) {
     if (action === "status") {
       const nextStatus = task.status === "READY" ? "PREPARING" : "READY";
       await updateTask(getApiUrl(), taskId, { status: nextStatus });
-      setMessage(Task marked ${nextStatus.toLowerCase()}., "success");
+      setMessage(`Task marked ${nextStatus.toLowerCase()}.`, "success");
     }
 
     if (action === "delete") {
@@ -96,7 +96,7 @@ async function handleTaskAction(event) {
 
     await refreshData();
   } catch (error) {
-    setMessage(Task action failed: ${error.message}, "error");
+    setMessage(`Task action failed: ${error.message}`, "error");
   }
 }
 
