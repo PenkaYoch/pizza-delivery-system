@@ -28,7 +28,8 @@ body {
 }
 
 button,
-input {
+input,
+a {
   font: inherit;
 }
 
@@ -117,6 +118,13 @@ h2 {
   border: 1px solid var(--line);
   background: var(--panel);
   color: var(--ink);
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.ghost-button:visited {
+ color: var(--ink);
 }
 
 .header-actions {
