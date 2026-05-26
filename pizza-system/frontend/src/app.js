@@ -103,7 +103,7 @@ async function handleTaskAction(event) {
 function startApp() {
   elements.form.addEventListener("submit", handleCreateTask);
   elements.refreshButton.addEventListener("click", refreshData);
-  elements.taskTable.addEventListener("click", handleTaskAction);
+  elements.tasksTable.addEventListener("click", handleTaskAction);
 
   refreshData();
   setInterval(refreshData, 10000);
