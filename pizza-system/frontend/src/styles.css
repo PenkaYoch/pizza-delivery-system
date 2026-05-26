@@ -348,6 +348,28 @@ th {
   color: var(--green);
 }
 
+.task-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.task-actions button {
+  min-height: 30px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0 9px;
+  background: var(--panel);
+  color: var(--ink);
+  font-size: 0.76rem;
+  font-weight: 850;
+}
+
+.task-actions button[data-task-action="delete"] {
+  border-color: rgba(217, 79, 53, 0.32);
+  color: var(--accent-dark);
+}
+
 .notification-list {
   display: grid;
   gap: 0;

@@ -29,7 +29,12 @@ public class PizzaOvenService {
 
             // 2. Fetch the fresh state of the task
             PizzaTask task = repository.findById(taskId)
-                    .orElseThrow(() -> new IllegalArgumentException("Task not found: " + taskId));
+                    .orElse(null);
+
+            if(task == null) {
+                log.info("Skipping bake completion for deleted task {}", taskId);
+                return;
+            }
 
             // 3. Update the state to Ready
             task.setStatus(PizzaTaskStatus.READY);

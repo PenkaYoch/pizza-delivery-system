@@ -27,7 +27,7 @@ function renderTasks(tasks) {
   if (tasks.length === 0) {
     elements.tasksTable.innerHTML = `
       <tr>
-        <td class="empty-state" colspan="4">No tasks yet.</td>
+        <td class="empty-state" colspan="5">No tasks yet.</td>
       </tr>
     `;
     return;
@@ -61,6 +61,15 @@ function taskTemplate(task) {
       <td>${escapeHtml(task.pizzaName || "-")}</td>
       <td><span class="status-pill" data-status="${escapeHtml(task.status)}">${escapeHtml(statusLabel(task.status))}</span></td>
       <td>${formatDate(task.createdAt)}</td>
+      <td>
+         <div class="task-actions">
+            <button type="button" data-task-action="rename" data-task-id="${task.id}">Rename</button>
+            <button type="button" data-task-action="status" data-task-id="${task.id}">
+                ${task.status === "READY" ? "Preparing" : "Ready"}
+            </button>
+            <button type="button" data-task-action="delete" data-task-id="${task.id}">Delete</button>
+            </div>
+         </td>
     </tr>
   `;
 }

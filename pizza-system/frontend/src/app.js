@@ -1,4 +1,4 @@
-import { createTask, fetchNotifications, fetchTasks } from "./services/api.js";
+import { createTask, deleteTask, fetchNotifications, fetchTasks, updateTask } from "./services/api.js";
 import { getApiUrl } from "./state/config.js";
 import { elements } from "./ui/dom.js";
 import { render, setMessage } from "./ui/render.js";
@@ -53,9 +53,57 @@ async function handleCreateTask(event) {
   }
 }
 
+async function handleTaskAction(event) {
+  const button = event.target.closest("[data-task-action]");
+  if (!button) {
+    return;
+  }
+
+  const taskId = button.dataset.taskId;
+  const action = button.dataset.taskAction;
+  const task = state.tasks.find((item) => String(item.id) === taskId);
+
+  if (!task) {
+    setMessage("Task not found. Refresh and try again.", "error");
+    return;
+  }
+
+  try {
+    if (action === "rename") {
+      const pizzaName = window.prompt("Pizza name", task.pizzaName  "");
+      if (pizzaName == null  pizzaName.trim() === "") {
+        return;
+      }
+
+      await updateTask(getApiUrl(), taskId, { pizzaName: pizzaName.trim() });
+      setMessage("Task renamed.", "success");
+    }
+
+    if (action === "status") {
+      const nextStatus = task.status === "READY" ? "PREPARING" : "READY";
+      await updateTask(getApiUrl(), taskId, { status: nextStatus });
+      setMessage(Task marked ${nextStatus.toLowerCase()}., "success");
+    }
+
+    if (action === "delete") {
+      if (!window.confirm(Delete ${task.pizzaName || "this task"}?)) {
+        return;
+      }
+
+      await deleteTask(getApiUrl(), taskId);
+      setMessage("Task deleted.", "success");
+    }
+
+    await refreshData();
+  } catch (error) {
+    setMessage(Task action failed: ${error.message}, "error");
+  }
+}
+
 function startApp() {
   elements.form.addEventListener("submit", handleCreateTask);
   elements.refreshButton.addEventListener("click", refreshData);
+  elements.taskTable.addEventListener("click", handleTaskAction);
 
   refreshData();
   setInterval(refreshData, 10000);
