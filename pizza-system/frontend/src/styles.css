@@ -106,15 +106,17 @@ h2 {
 .ghost-button,
 .order-form button {
   display: inline-flex;
-  align-text: center;
+  align-items: center;
   justify-content: center;
   min-height: 42px;
   border-radius: 8px;
   padding: 0 18px;
   font-weight: 800;
+  vertical-align: middle;
 }
 
 .ghost-button {
+  align-text: center;
   border: 1px solid var(--line);
   background: var(--panel);
   color: var(--ink);
