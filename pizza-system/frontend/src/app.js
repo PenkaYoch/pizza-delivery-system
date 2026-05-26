@@ -9,11 +9,11 @@ const state = {
 };
 
 async function loadTasks() {
-  state.tasks = await fetchTasks(getApiUrl("taskApiUrl"));
+  state.tasks = await fetchTasks(getApiUrl());
 }
 
 async function loadNotifications() {
-  state.notifications = await fetchNotifications(getApiUrl("notificationApiUrl"));
+  state.notifications = await fetchNotifications(getApiUrl());
 }
 
 async function refreshData() {
@@ -44,7 +44,7 @@ async function handleCreateTask(event) {
   }
 
   try {
-    await createTask(getApiUrl("taskApiUrl"), pizzaName);
+    await createTask(getApiUrl(), pizzaName);
     elements.pizzaName.value = "";
     setMessage("Pizza task created.", "success");
     await refreshData();
