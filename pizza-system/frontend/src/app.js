@@ -1,4 +1,4 @@
-import { createTask, deleteTask, fetchNotifications, fetchTasks, updateTask } from "./services/api.js";
+import { createTask, deleteTask, fetchNotifications, fetchTasks, updateTask } from "./services/api.js?v=20260526-quote";
 import { getApiUrl } from "./state/config.js";
 import { elements } from "./ui/dom.js";
 import { render, setMessage } from "./ui/render.js";
