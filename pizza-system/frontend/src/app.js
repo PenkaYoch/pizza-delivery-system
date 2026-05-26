@@ -86,7 +86,7 @@ async function handleTaskAction(event) {
     }
 
     if (action === "delete") {
-      if (!window.confirm(Delete ${task.pizzaName || "this task"}?)) {
+      if (!window.confirm(`Delete ${task.pizzaName || "this task"}?`)) {
         return;
       }
 
