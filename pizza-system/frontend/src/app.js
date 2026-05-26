@@ -1,7 +1,7 @@
-import { createTask, deleteTask, fetchNotifications, fetchTasks, updateTask } from "./services/api.js?v=20260526-quote";
-import { getApiUrl } from "./state/config.js";
-import { elements } from "./ui/dom.js";
-import { render, setMessage } from "./ui/render.js";
+import { createTask, deleteTask, fetchNotifications, fetchTasks, updateTask } from "./services/api.js?v=20260526-last";
+import { getApiUrl } from "./state/config.js?v=20260526-last";
+import { elements } from "./ui/dom.js?v=20260526-last";
+import { render, setMessage } from "./ui/render.js?v=20260526-last";
 
 const state = {
   tasks: [],
