@@ -70,8 +70,8 @@ async function handleTaskAction(event) {
 
   try {
     if (action === "rename") {
-      const pizzaName = window.prompt("Pizza name", task.pizzaName  "");
-      if (pizzaName == null  pizzaName.trim() === "") {
+      const pizzaName = window.prompt("Pizza name", task.pizzaName || "");
+      if (pizzaName == null || pizzaName.trim() === "") {
         return;
       }
 
