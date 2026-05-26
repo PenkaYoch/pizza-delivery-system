@@ -1,5 +1,5 @@
 import { createTask, fetchNotifications, fetchTasks } from "./services/api.js";
-import { getApiUrl, resetLegacyApiUrls, saveApiUrl } from "./state/config.js";
+import { getApiUrl } from "./state/config.js";
 import { elements } from "./ui/dom.js";
 import { render, setMessage } from "./ui/render.js";
 
@@ -53,25 +53,7 @@ async function handleCreateTask(event) {
   }
 }
 
-function bindSettings() {
-  elements.taskApiUrl.value = getApiUrl("taskApiUrl");
-  elements.notificationApiUrl.value = getApiUrl("notificationApiUrl");
-
-  elements.taskApiUrl.addEventListener("change", () => {
-    saveApiUrl("taskApiUrl", elements.taskApiUrl.value);
-    refreshData();
-  });
-
-  elements.notificationApiUrl.addEventListener("change", () => {
-    saveApiUrl("notificationApiUrl", elements.notificationApiUrl.value);
-    refreshData();
-  });
-}
-
 function startApp() {
-  resetLegacyApiUrls();
-  bindSettings();
-
   elements.form.addEventListener("submit", handleCreateTask);
   elements.refreshButton.addEventListener("click", refreshData);
 

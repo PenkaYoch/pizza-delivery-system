@@ -1,8 +1,6 @@
 export const elements = {
   form: document.querySelector("#orderForm"),
   pizzaName: document.querySelector("#pizzaName"),
-  taskApiUrl: document.querySelector("#taskApiUrl"),
-  notificationApiUrl: document.querySelector("#notificationApiUrl"),
   refreshButton: document.querySelector("#refreshButton"),
   message: document.querySelector("#message"),
   tasksTable: document.querySelector("#tasksTable"),
