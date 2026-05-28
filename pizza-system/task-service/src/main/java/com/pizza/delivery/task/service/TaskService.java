@@ -58,45 +58,33 @@ public class TaskService {
 
     @Transactional
     public boolean deleteTask(Long id) {
-        return repository.findById(id)
-                .map(task -> {
-                    publishStatusChanged(task.getId(), new PizzaOrderStatusChangedEvent(task.getId(), task.getPizzaName(), PizzaTaskStatus.DELETED.name()));
-                    repository.deleteById(id);
-                    return true;
-                })
-                .orElse(false);
+        return repository.findById(id).map(task -> {
+            publishStatusChanged(task.getId(), new PizzaOrderStatusChangedEvent(task.getId(), task.getPizzaName(), PizzaTaskStatus.DELETED.name()));
+            repository.deleteById(id);
+            return true;
+        }).orElse(false);
     }
 
     public Optional<PizzaTask> updateTask(Long id, TaskController.UpdateTaskRequest updateTaskRequest) {
-        return repository.findById(id)
-                .map(task -> {
+        return repository.findById(id).map(task -> {
 
-                    if (updateTaskRequest.pizzaName() != null && !updateTaskRequest.pizzaName().isBlank()) {
-                        task.setPizzaName(updateTaskRequest.pizzaName().trim());
-                    }
+            if (updateTaskRequest.pizzaName() != null && !updateTaskRequest.pizzaName().isBlank() && !updateTaskRequest.pizzaName().equals(task.getPizzaName())
+            ) {
+                task.setPizzaName(updateTaskRequest.pizzaName().trim());
+                publishStatusChanged(task.getId(), new PizzaOrderStatusChangedEvent(task.getId(), task.getPizzaName(), PizzaTaskStatus.UPDATED.name()));
+                return repository.saveAndFlush(task);
+            }
 
-                    if (updateTaskRequest.status() != null) {
-                        task.setStatus(updateTaskRequest.status());
-                    }
-
-                    PizzaTask savedTask = repository.saveAndFlush(task);
-
-                    PizzaTaskStatus previousStatus = task.getStatus();
-                    if (updateTaskRequest.status() != null && updateTaskRequest.status() != previousStatus) {
-                        publishStatusChanged(savedTask.getId(), new PizzaOrderStatusChangedEvent(savedTask.getId(), savedTask.getPizzaName(), savedTask.getStatus().name()));
-                    }
-
-                    return savedTask;
-                });
+            return task;
+        });
     }
 
     private void publishStatusChanged(Long taskId, PizzaOrderStatusChangedEvent event) {
         try {
-            kafkaTemplate.send("pizza-orders", String.valueOf(taskId), event)
-                    .exceptionally(ex -> {
-                        log.warn("Failed to publish pizza task status event for task {}", taskId, ex);
-                        return null;
-                    });
+            kafkaTemplate.send("pizza-orders", String.valueOf(taskId), event).exceptionally(ex -> {
+                log.warn("Failed to publish pizza task status event for task {}", taskId, ex);
+                return null;
+            });
         } catch (RuntimeException ex) {
             log.warn("Failed to publish pizza task status event for task {}", taskId, ex);
         }

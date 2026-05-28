@@ -79,12 +79,6 @@ async function handleTaskAction(event) {
       setMessage("Task renamed.", "success");
     }
 
-    if (action === "status") {
-      const nextStatus = task.status === "READY" ? "PREPARING" : "READY";
-      await updateTask(getApiUrl(), taskId, { status: nextStatus });
-      setMessage(`Task marked ${nextStatus.toLowerCase()}.`, "success");
-    }
-
     if (action === "delete") {
       if (!window.confirm(`Delete ${task.pizzaName || "this task"}?`)) {
         return;

@@ -64,9 +64,6 @@ function taskTemplate(task) {
       <td>
          <div class="task-actions">
             <button type="button" data-task-action="rename" data-task-id="${task.id}">Rename</button>
-            <button type="button" data-task-action="status" data-task-id="${task.id}">
-                ${task.status === "READY" ? "Change to Preparing" : "Change to Ready"}
-            </button>
             <button type="button" data-task-action="delete" data-task-id="${task.id}">Delete</button>
             </div>
          </td>
